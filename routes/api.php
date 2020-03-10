@@ -18,6 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
 
-Route::get('/getParam','HomeViewController@getParamPartial')->name('getParamPartial');
-Route::get('/getData','HomeViewController@getData')->name('getDataPartial');
-Route::get('/getVan','HomeViewController@getVan')->name('getDataVan');
+Route::get('/getParam','HomeViewController@getParamPartial')->name('getParamPartial'); // Récupère le div params
+Route::get('/getData','HomeViewController@getData')->name('getDataPartial'); // Récupère le div results

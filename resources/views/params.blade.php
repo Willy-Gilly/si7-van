@@ -49,22 +49,24 @@
 
 
 <script>
+    //Appel des calculs
     function calcul(){
         for (let $i = 0; $i < $('#myNbYear').val(); $i++)
         {
-            document.cookie = "year"+$i+"ca="+$("#ca"+$i).val();
-            document.cookie = "year"+$i+"cs="+$("#cs"+$i).val();
+            document.cookie = "year"+$i+"ca="+$("#ca"+$i).val();//Stockage dans des cookies
+            document.cookie = "year"+$i+"cs="+$("#cs"+$i).val();//Stockage dans des cookies
         }
-        document.cookie = "invest="+$("#invest").val();
-        document.cookie = "tauxActu="+$("#tauxActu").val();
-        doGet("/api/getData","#results");
-        $('#paramCollapse').click();
+        document.cookie = "invest="+$("#invest").val();//Stockage dans des cookies
+        document.cookie = "tauxActu="+$("#tauxActu").val();//Stockage dans des cookies
+        doGet("/api/getData","#results");//Actualisation du div
+        $('#paramCollapse').click();//Fake click pour minimiser les paramètres de calculs
     }
 </script>
 
 
 
 <script>
+    //Fonction d'actualisation (AJAX)
     function doGet(url,divToUpdate ,params) {
         params = params || {};
 
@@ -75,6 +77,7 @@
     }
 </script>
 <script>
+    //Sert à avoir un datamask de type decimal, fixé à deux chiffres après la virgule
     $(document).ready(function(){
         $(".dataMaskDouble").inputmask("decimal", {
             placeholder: "0",

@@ -14,7 +14,7 @@
                     <div class="input-group">
                         <input type="text" id="year" name="year"
                                class="form-control profile-input-content dataMaskNbYear"
-                               placeholder="{{$_COOKIE["nbYear"] ?? 'Nombre d\'année(s)'}}" onkeyup="updateTextYear()" onkeydown="updateTextYear()"
+                               placeholder="Nombre d'année(s)" onkeyup="updateTextYear()" onkeydown="updateTextYear()"
                                onchange="updateTextYear()" onkeypress="updateTextYear()" onload="onloadInit()">
                         <button id="validationYear" type="button" disabled onclick="selectNbYear()" onload="onloadInit()" style="padding-left: 2px;"
                                 class="btn bg-gradient-blue col-5">Selectionnez un nombre d'année
@@ -39,10 +39,10 @@
 @section('js')
 
     <script>
-        $(document).ready(onloadInit()); // Onload setting value to years
+        $(document).ready(onloadInit()); // On set par défaut au cas où il y aurait eu un problème au load de la page (avec un refresh par exemple).
 
         /**
-         * Reinit the cookie value
+         * Réinitialise toutes les valeurs des cookies
          */
         function reInitNbYear(reload) {
             for (let $i = 0; $i < getCookie("nbYear"); $i++)
@@ -53,8 +53,8 @@
 
             document.cookie = 'nbYear=0; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = 'tauxActu=0; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            @php($_COOKIE["nbYear"] = null)
 
+            //le reload n'est activé que lorsqu'on clique sur le bouton réinitialiser
             if(reload === true)
             {
                 location.reload();
@@ -62,92 +62,97 @@
         }
 
         /**
-         * Set the cookie value
-         * And Display parameters page
+         * Met des valeurs dans les cookies
+         * Et affiche la page des paramètres
          */
         function selectNbYear() {
-            reInitNbYear(false);
-            let nbYear = document.getElementById("year").value;
-            let nbDisplayed;
-            if(nbYear.startsWith("0"))
+            reInitNbYear(false); // On supprime tout ce qui existait à chaque clique sur le bouton où l'on change le nombre d'années
+
+            let nbYear = document.getElementById("year").value; //On récupère la valeur de l'input
+            let nbDisplayed; // Initialisation de la variable qui va servir à stoquer le nombre affiché
+            if(nbYear.startsWith("0")) // On vérifie que le nombre ne commence pas par 0, si il commence par 0, on supprime le 0
             {
                 nbDisplayed = nbYear.replace("0",'');
             }
-            else
+            else //Sinon on affiche la valeur par défaut
             {
                 nbDisplayed=nbYear;
             }
-            document.cookie = "nbYear="+nbDisplayed;
-            $("#results").innerHTML="";
-            doGet('/api/getParam','#params');
+            document.cookie = "nbYear="+nbDisplayed; // On met dans un cookie le nombre d'années selectionné pour s'en servir en backend
+            $("#results").innerHTML=""; // Je remplace ce qu'il y a dans le div de results dans le cas où on actualise les paramètres et qu'il y avait un précédent calcul
+            doGet('/api/getParam','#params'); // J'actualise le div
         }
 
         /**
          *  Values initialisations
          **/
         function onloadInit() {
-            let myInput = document.getElementById("year");
-            let myValidationButton = document.getElementById("validationYear");
-            @if(isset($_COOKIE["nbYear"]))
+
+            let myInput = document.getElementById("year"); //Récupère l'input du nombre d'années
+            let myValidationButton = document.getElementById("validationYear"); // Récupère le bouton qui selectionne le nombre d'années
+
+            @if(isset($_COOKIE["nbYear"])) // Si il y a un cookie présent, on change le texte du bouton
             {
-                myInput.innerText='{{$_COOKIE["nbYear"]}}';
-                @if($_COOKIE["nbYear"] > 1)
+                myInput.innerText='{{$_COOKIE["nbYear"]}}'; // Je remet le cookie dans l'input du nombre d'année
+                @if($_COOKIE["nbYear"] > 1) // On adapte le texte pour ne pas faire de faute de grammaire selon le nombre d'années
                     myValidationButton.innerText = "Selectionner pour " + '{{$_COOKIE["nbYear"]}}' + " années";
                 @else
                     myValidationButton.innerText = "Selectionner pour " + '{{$_COOKIE["nbYear"]}}' + " année";
                 @endif
                 myValidationButton.removeAttribute("disabled");
             }
-            @else
+            @else // sinon, on l'initialise par dessus.
             {
                 myInput.value="";
                 myValidationButton.innerText = "Selectionnez un nombre d'année";
-                myValidationButton.setAttribute("disabled",null);
+                myValidationButton.setAttribute("disabled",null); // On le met en disable pour pas que l'utilisateur rentre de valeur.
             }
             @endif
         }
 
         /**
-         * Change Button Text and enable/disable features
+         * Change le texte du bouton selon ce que l'utilisateur écrit.
          */
         function updateTextYear() {
-            let myInput = document.getElementById("year");
-            let myButton = document.getElementById("validationYear");
-            let nbYear = myInput.value;
-            myButton.setAttribute("disabled",null);
-            if (myInput.value) {
+            let myInput = document.getElementById("year"); //Récupère l'input du nombre d'années
+
+            let myButton = document.getElementById("validationYear"); // Récupère le bouton de validation du nombre d'années
+
+            let nbYear = myInput.value; // Je met la valeur du nombre d'années dans une variable
+
+            myButton.setAttribute("disabled",null); // Je supprime l'attribut disable du bouton
+
+            if (myInput.value) { // Si il y a une valeur dans l'input alors
                 let txt2 = "Selectionnez un nombre d'année";
                 let txt1 = "Selectionner pour ";
                 let nbDisplayed;
-                if (nbYear == 1) {
+
+                if(nbYear.startsWith("0"))//On retire le 0 au début
+                {
+                    nbDisplayed = nbYear.replace("0",'');
+                }
+                else
+                {
+                    nbDisplayed=nbYear;
+                }
+
+                myButton.removeAttribute("disabled"); // On retire le disable du bouton
+
+                if (nbYear == 1) { // Si c'est égal à 1 (peut être "01" "1", pas de triple égal car on reçoit du texte)
                     txt2 = " année";
-                    if(nbYear.startsWith("0"))
-                    {
-                        nbDisplayed = nbYear.replace("0",'');
-                    }
-                    else
-                    {
-                        nbDisplayed=nbYear;
-                    }
-                    myButton.removeAttribute("disabled");
+
                 } else if (nbYear > 1) {
                     txt2 = " années";
-                    if(nbYear.startsWith("0"))
-                    {
-                        nbDisplayed = nbYear.replace("0",'');
-                    }
-                    else
-                    {
-                        nbDisplayed=nbYear;
-                    }
-                    myButton.removeAttribute("disabled");
-                } else {
+
+                } else { // L'input est soit nul, soit égal à 0 donc on remet le disable
                     myButton.setAttribute("disabled", null);
                     txt1="";
                     nbDisplayed="";
                 }
-                myButton.innerText = txt1 + nbDisplayed + txt2;
-            } else {
+
+                myButton.innerText = txt1 + nbDisplayed + txt2; // On change le texte d'affiché avec les chaines de caractères
+
+            } else { // sinon je remet le disable et réinitialise le texte
                 myButton.setAttribute("disabled", null);
                 myButton.innerText = "Selectionnez un nombre d'année";
             }
@@ -157,45 +162,23 @@
 
     <!-- AJAX -->
     <script>
-        function doGet(url,divToUpdate ,params) {
+        function doGet(url,divToUpdate ,params) { // sert à actualiser une partie du code html
             params = params || {};
-            $.get(url, params, function(response) { // requesting url which in form
+            $.get(url, params, function(response) { // Essaye d'obtenir un résultat dans les routes pour retourner une réponse
 
-                $(divToUpdate).html(response); // getting response and pushing to element with id #response
+                $(divToUpdate).html(response); // Si il y a une réponse, la retourne
             });
         }
     </script>
 
     <!-- Plugins de DataMask -->
     <script>
-        $(document).ready(function(){
+        $(document).ready(function(){ // Masque de remplissage pour le nombre d'années
             $(".dataMaskNbYear").inputmask("9[9]");
-        });
-        $(document).ready(function(){
-            $(".dataMaskNumeric").inputmask("9[9][9][9][9][9]");
-        });
-        $(document).ready(function(){
-            $(".dataMaskDouble").inputmask("decimal", {
-                placeholder: "0",
-                digits: 2,
-                digitsOptional: false,
-                radixPoint: ",",
-                groupSeparator: "",
-                autoGroup: true,
-                allowPlus: false,
-                allowMinus: false,
-                clearMaskOnLostFocus: false,
-                removeMaskOnSubmit: true,
-                autoUnmask: true,
-                onUnMask: function(maskedValue, unmaskedValue) {
-                    let x = unmaskedValue.split(',');
-                    return x[0].replace(/\./g, '') + '.' + x[1];
-                }
-            })
         });
     </script>
     <script>
-        function getCookie(cname) {
+        function getCookie(cname) { // Sert à obtenir un cookie par son nom
             const name = cname + "=";
             const decodedCookie = decodeURIComponent(document.cookie);
             const ca = decodedCookie.split(';');

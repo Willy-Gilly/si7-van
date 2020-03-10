@@ -9,6 +9,7 @@ class HomeViewController extends Controller
 {
     /**
      * @return array|string
+     * Actualisation du div params de home.blade.php
      */
     public static function getParamPartial()
     {
@@ -21,6 +22,7 @@ class HomeViewController extends Controller
 
     /**
      * @return array|string
+     * Actualisation du div results de home.blade.php
      */
     public static function getData()
     {
@@ -35,6 +37,7 @@ class HomeViewController extends Controller
 
     /**
      * @return array
+     * Récupère les colonnes pour le datatable
      */
     public static function getColumns()
     {
@@ -50,6 +53,7 @@ class HomeViewController extends Controller
 
     /**
      * @return array
+     * Récupère les libellés des lignes du datatable
      */
     public static function getLineLabel()
     {
@@ -59,6 +63,7 @@ class HomeViewController extends Controller
 
     /**
      * @return array
+     * Récupère les formules des lignes du datatable
      */
     public static function getFormulesEndOfLine()
     {
@@ -69,6 +74,7 @@ class HomeViewController extends Controller
 
     /**
      * @return void
+     * Met les valeurs calculées dans un Cookie pour utilisation dans getLine
      */
     public static function setLines()
     {
@@ -92,15 +98,16 @@ class HomeViewController extends Controller
 
     /**
      * @return int
-     * Update here if adding a row
+     * Récupère le nombre de lignes à afficher dans le datatable (boucle for)
      */
     public static function getNbLineDatatable()
     {
-        return 10;
+        return sizeof($_COOKIE["results"]);
     }
 
     /**
      * @return array
+     * Réalise l'ensemble des calculs
      */
     public static function calculs()
     {
@@ -160,6 +167,7 @@ class HomeViewController extends Controller
     /**
      * @param $lineNumber
      * @return array
+     * Retourne la valeur associée au numéro de la ligne
      */
     public static function getLine($lineNumber)
     {

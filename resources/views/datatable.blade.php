@@ -49,9 +49,10 @@
 
 
 <script>
+    // Utilisation du datatable
     $('.datatable').DataTable(
         {
-            "language":
+            "language": // pas utile car on affiche pas les différentes fonctionnalités du plugin mais set la langue
                 {
                     "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
                 }
