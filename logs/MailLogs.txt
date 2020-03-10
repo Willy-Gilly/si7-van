@@ -1,0 +1,21 @@
+2020-02-05 09:33:08 : SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Session size exceeds fixed maximum session size
+ SMTP code: 552 Additional SMTP info: 4.3.1
+
+2020-02-05 09:33:32 : SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Session size exceeds fixed maximum session size
+ SMTP code: 552 Additional SMTP info: 4.3.1
+
+
+2020-02-05 10:46:40 : SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Message size exceeds fixed maximum message size
+ SMTP code: 552 Additional SMTP info: 4.3.1
+
+2020-02-05 11:42:20 : SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Message size exceeds fixed maximum message size
+ SMTP code: 552 Additional SMTP info: 4.3.1
+
+2020-02-13 13:58:39 : SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Message size exceeds fixed maximum message size
+ SMTP code: 552 Additional SMTP info: 4.3.1
+
+2020-02-13 14:34:15 : SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Message size exceeds fixed maximum message size
+ SMTP code: 552 Additional SMTP info: 4.3.1
+
+2020-02-13 14:35:41 : SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Message size exceeds fixed maximum message size
+ SMTP code: 552 Additional SMTP info: 4.3.1

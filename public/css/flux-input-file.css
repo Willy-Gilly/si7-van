@@ -1,0 +1,16 @@
+label.file-input
+{
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+label.file-input input.file
+{
+    position: relative;
+    height: 100%;
+    width: auto;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
